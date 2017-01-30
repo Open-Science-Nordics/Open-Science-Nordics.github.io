@@ -1,0 +1,166 @@
+---
+title: "Open Science and R"
+subtitle: "Symposium and Workshop"
+author: "Stockholm, Swedish Museum of Natural History"
+date: "Jan 23rd - Jan 25th 2017"
+output:
+  tint::tintHtml: 
+     self_contained: TRUE
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tint)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tint'))
+
+options(htmltools.dir.version = FALSE)
+
+fig2 <- function(fig_path) {
+	library(imager)
+#	fig_path <- "../style-assets/fig/bg-symposium.jpg"
+	bmp <- readbitmap::read.bitmap(fig_path)
+	dim(bmp) <- c(dim(bmp)[1:2], 1, dim(bmp)[3])
+	r <- cimg(bmp) %>% mirror("x") %>% imrotate(-90)
+	h <- height(r)
+	w <- width(r)
+	a <- h / w
+	r2 <- as.raster(r)
+
+	op <- par(bg = "transparent", mar = c(0, 0, 0, 0), 
+						bty = "n", xpd = NA)
+#	plot(c(1, h), c(1, w), 
+	plot(c(0, 1), c(0, 1),
+			 asp = a, axes = FALSE, bty = "n", 
+#			 frame.plot = TRUE,
+			 type = "n", xlab = "", ylab = "")
+	par(op)
+	rasterImage(r2, 0, 0, 1, 1, interpolate = TRUE)
+}
+
+fig3 <- function(fig_path) {
+	r <- as.raster(readbitmap::read.bitmap(fig_path))
+	grid::grid.newpage()
+	grid::grid.raster(r)
+}
+
+fig <- function(fig_path) {
+
+	library(ggplot2)
+	r <- as.raster(readbitmap::read.bitmap(fig_path))
+
+	ggplot() +
+		annotation_raster(r, -Inf, Inf, -Inf, Inf, interpolate = TRUE) +
+		theme(plot.background = element_blank()) +
+		theme_void()
+}
+
+
+```
+
+
+```{r fig-nocap-fullwidth-1, echo = FALSE, fig.fullwidth=TRUE, fig.width=12, cache=FALSE}
+fig("../style-assets/fig/bg-symposium.jpg")
+```
+
+On the 23rd of January 2017 a symposium about Open Source systems^[see [Open Source Systems in the Public Sector](http://www.nrm.se/english/researchandcollections/symposiumopensourcesystems.os2017.html) announcement] in the public sector was held in Stockholm at the Swedish Museum of Natural History.
+
+On the 24th - 25th of January 2017 a two-day workshop^[see the "[ROpenSci for all](http://www.nrm.se/english/researchandcollections/symposiumopensourcesystems.os2017.html)" announcement] was arranged on the topic of using reproducible open research workflows with R for biodiversity analysis.
+
+# Symposium
+
+```{r fig-nocap-margin-before-first, fig.margin=TRUE, fig.width=2, fig.height=2, cache=FALSE, echo=FALSE}
+fig("../style-assets/fig/img-circle-symposium.png")
+```
+
+`r newthought('The symposium ')` was given during one day and materials covered included serveral talks about using open source systems in the public sector.
+
+More details about the full programme can be found in the program announcement.^[[Symposium Programme](http://www.nrm.se/english/researchandcollections/symposiumopensourcesystems/program.9003769.html)] Links to presentations will be added below as presenters make their materials available ...
+
+## Talks
+
+Talks included these presentations:
+
+- _Open Source Systems in the Public Sector_ by Fredrik Ronquist, Head of the Department of Bioinformatics and Genetics, Swedish Museum of Natural History
+- _Open Source Systems and Open Data at the Ministry of Culture in Sweden_ by Sanja Halling, Digisam
+- _Open Source Systems for Libraries in Sweden_ by Jessica Andersson, Alingsås bibliotek, The Swedish Koha User Group
+- _Open Source Systems in use at the National Library of Sweden_ by Peter Krantz, National Library of Sweden
+- _Open Source tools for collection management; the DINA web-based collection management system_ by James Macklin, Agriculture and Agri-Food Canada
+- _Adopting Atlas of Living Australia systems for Atlas of Living Scotland_ by Ella Vogel, National Biodiversity Network
+- _Open Source Systems serving Open Data in Environmental Management in Sweden_ by Anna Otmalm, Swedish Environmental Protection Agency
+- _Open Science with R_^[see [PDF](https://rawgit.com/Open-Science-Nordics/public-sector-open-science/master/presentations-from-scott/Chamberlain.pdf)] by Scott Chamberlain, rOpenSci
+- _R Tools for Biodiversity Informatics_^[see [Web slides](https://rawgit.com/Open-Science-Nordics/public-sector-open-science/master/presentations-from-markus/R-Tools-For-Biodiversity-Informatics.html)] by Markus Skyttner, Swedish Museum of Natural History
+
+# Workshop
+
+```{r fig-nocap-margin-first, fig.margin=TRUE, fig.width=2, fig.height=2, cache=FALSE, echo=FALSE}
+fig("../style-assets/fig/img-circle-course.png")
+```
+
+`r newthought('Participants in the')` two-day workshop - around 30 signed up - used GitHub for coordination and the presenters put their materials there including source code.^[[Open Science Nordics at GitHub](https://github.com/Open-Science-Nordics)]
+
+## Presenters
+
+`r newthought('Talks, demos and exercises')` were prepared by:
+
+- Scott Chamberlain, [ROpenSci](https://ropensci.org)
+- Ben Raymond, [ACE CRC](http://acecrc.org.au/)
+- Alejandro Ruete, [Swedish University of Agricultural Sciences](http://www.slu.se/en/)
+- Markus Skyttner, [Swedish Museum of Natural History](https://nrm.se)
+- Alexander Zizka, [Gothenburg University](https://gu.se)
+
+## Preparations
+
+`r newthought('Participants were asked')` to prepare for the workshop by studying some relevant learning resources.^[[see suggested readings](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/introduction)]
+
+## Topics
+
+`r newthought('Talks and demonstrations included')` various exercises related to topics in the area of scientific computation and biodiversity analysis with R and were tailored for the participants and their specific interest. 
+
+Topics presented in talks included these:
+
+- R for scientific computation and biodiversity analysis^[[see web slides](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/Mirroreum-and-EUBON-R-packages.html)] - presented by Markus Skyttner
+- Using rOpenSci and R packages for biodiversity analysis^[[PDF](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/Chamberlain.pdf)] - presented by Scott Chamberlain
+- Computing ignorance scores for primary biodiversity data ^[[see PDF](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/Ruete%20-%20Ignorance%20Maps%20for%20Oikos2017%20Github.pdf)] - presented by Alejandro Ruete
+- Mirroreum and EU-BON R packages^[[see web slides](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/R-for-Scientific-Computation-and-Biodiversity-Analysis.html)] on using Docker for packaging and delivering reproducible research - presented by Markus Skyttner
+- Consuming data using rOpenSci packages^[see [exercises at GitHub](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/exercises/ropensci/00-introduction/intro.html)] - including using data from  GBIF^[see  [exercise](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/exercises/ropensci/02-biodiversity/rgbif.html)] - and more^[see [exercises](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/ropensci)] - presented by Scott Chamberlain
+- Data from the Atlas of Living Australia platform - the APIs - and some ALA4R use case examples^[see [PDF](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/raymond_martin-stockholm-jan-2017.pdf)] - presented by Ben Raymond
+- Cleaning geospatial data and computing bias using speciesgeocodeR and sampbias R packages^[see [PDF](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/talks/zizka_speciesgeocodeR_sampbias.pdf)] - presented by Alexander Zizka
+
+Various exercises^[see [GitHub repo with all exercises](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises)] (demonstrations and/or tasks with solutions) corresponding to these topics are available, including:
+
+- How to get and clean data using `dplyr` and `tidyr` - an example with data wrangling involving data in spreadsheet format^[see use case with [local data - Swedish Butterfly data](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/swedishbutterflies)]
+- How to get data from biodiversity data services through rOpenSci R packages and the ALA4R R packages^[see use case with [data from GBIF](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/ropensci)] ^[see use case with [data from ALA](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/ALA4RandWebAPIsExercises)]
+- How to get data directly from Web APIs - an exercise suggesting some R packages for directly accessing web data ^[see [exercise](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/ALA4RandWebAPIsExercises)]
+- How to rasterize primary biodiversity data^[see [tutorial](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/DataHandlingTutorial)]
+- How to clean coordinates - a tutorial for using the "speciesgeocodeR" package^[see [tutorial](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/exercises/speciesgeocoder_sampbias/speciesgeocodeR_coordinate_cleaning_exercise.html)]
+- How to compute sampling bias - a tutorial for using the "sampbias" package^[see [tutorial](https://rawgit.com/Open-Science-Nordics/workshop-materials/master/exercises/speciesgeocoder_sampbias/sampbias_exercise.html)]
+- Excercises involving hands-on work with some R packages bundling Swedish data^[see use case with [Swedish bird data](https://github.com/Open-Science-Nordics/workshop-materials/tree/master/exercises/swedishbirds)]
+
+
+# Links
+
+`r newthought('Some suggested links ')` on topics related to Reproducible Open Research:
+
+- [ROpenSci - "Fostering open science and open data with R"](https://ropensci.github.io/ambassador-packet/slides/#ropensci)
+- [Some challenges in doing reproducible research](https://ropensci.org/blog/2014/06/09/reproducibility/)
+- [Towards Open Research](https://ndownloader.figshare.com/files/6739038)
+ 
+> "The duty of the man who investigates the writings of scientists, if learning the truth is his goal, is to make himself an enemy of all that he reads, and ... attack it from every side. He should also suspect himself as he performs his critical examination of it, so that he may avoid falling into either prejudice or leniency."
+>
+> `r tint::quote_footer('--- Alhazen (on the scientific method / reproducible research)')`
+
+# Feedback 
+
+`r newthought('If you attended')` this event, please make sure to fill out this quick survey with your feedback (see link below). 
+
+[Survey for feedback on "rOpenSci for all" workshop in Stockholm Jan 24th-25th 2017](https://www.surveymonkey.com/r/DV35GBX)
+
+It is a short and small set of 10 questions, expected to take less than 5 minutes to fill out.
+
+
+```{r bib, include=FALSE}
+# create a bib file for the R packages used in this document
+knitr::write_bib(c('base', 'rmarkdown'), file = 'skeleton.bib')
+```
